@@ -51,9 +51,9 @@ export class DbService {
     this.conn.rollback();
   }
 
-  public async select(sql: string): Promise<any> {
+  public async select(sql: string, param: any[] = []): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.conn.query(sql, (err, results) => {
+      this.conn.query(sql, param, (err, results) => {
         if (err) {
           reject(err);
         } else {
@@ -63,17 +63,27 @@ export class DbService {
     });
   }
 
-  public async insert(sql: string, data: object): Promise<any> {
+  public async insert(sql: string, param: object): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.conn.query(sql, data, (error, results) => {
-        // console.log('INSERT ERROR -> ', error);
+      this.conn.query(sql, param, (error, results) => {
         if (error) { 
           reject(error); 
         } else {
           resolve(results.insertId);
         }
       });
-      // console.log(query);
+    });
+  }
+
+  public async update(sql: string, param: any[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.conn.query(sql, param, (error, results) => {
+        if (error) { 
+          reject(error); 
+        } else {
+          resolve(results.affectedRows);
+        }
+      });
     });
   }
 

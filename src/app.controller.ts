@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Res, Post } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Res, Post, Put } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller('/api')
@@ -37,6 +37,17 @@ export class AppController {
   public async checkInserte(@Res() res: any) {
     try {
       const response = await this.appService.addDataError();
+
+      return res.status(HttpStatus.OK).send(response);
+    } catch (err) {
+      return res.status(HttpStatus.BAD_REQUEST).send(err);
+    }
+  }
+
+  @Put('/check/db/update')
+  public async checkUpdate(@Res() res: any) {
+    try {
+      const response = await this.appService.updateData();
 
       return res.status(HttpStatus.OK).send(response);
     } catch (err) {

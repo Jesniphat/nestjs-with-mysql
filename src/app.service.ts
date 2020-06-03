@@ -78,4 +78,26 @@ export class AppService {
       await this.db.release();
     }
   }
+
+  public async updateData(): Promise<any> {
+    try {
+      await this.db.connect();
+      await this.db.beginTransaction();
+
+      const effected = await this.db.update('UPDATE product SET name = ? where id = ?', ['xxx', 2]);
+      console.log(effected);
+      await this.db.commit();
+
+      return {
+        status: true,
+        effected
+      }
+    } catch (err) {
+      console.log('Error -> ', err.message);
+      await this.db.rollback();
+      throw err;
+    } finally {
+      await this.db.release();
+    }
+  }
 }
