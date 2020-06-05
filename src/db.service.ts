@@ -90,7 +90,7 @@ export class DbService {
   public async release(): Promise<any> {
     return new Promise((resolve) => {
       if (this.conn) { this.conn.release(); }
-      console.log('release done');
+      // console.log('release done');
       resolve(true);
     });
   }

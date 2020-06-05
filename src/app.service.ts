@@ -100,4 +100,21 @@ export class AppService {
       await this.db.release();
     }
   }
+
+  public async getPagingData(page: number) {
+    try {
+      await this.db.connect();
+      const sql = `
+        SELECT id, name, description 
+        FROM products ORDER BY id LIMIT 10 OFFSET ${page * 10}
+      `;
+      const data = await this.db.select(sql);
+
+      return data;
+    } catch (err) {
+      throw err;
+    } finally {
+      await this.db.release();
+    }
+  }
 }

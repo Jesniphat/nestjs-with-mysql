@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Res, Post, Put } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Res, Post, Put, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller('/api')
@@ -8,6 +8,22 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('/paging')
+  public async getPaging(
+    @Query() query: { page: string },
+    @Res() res: any,
+  ) {
+      try {
+        const page = typeof query.page === 'string' ? parseInt(query.page) : query.page; 
+        const data = await this.appService.getPagingData(page);
+
+        return res.status(HttpStatus.OK).json(data);
+      } catch (err) {
+        console.log(err);
+        return res.status(HttpStatus.BAD_REQUEST).send(err);
+      }
   }
 
   @Get('/check/db/check')
