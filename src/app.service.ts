@@ -109,12 +109,11 @@ export class AppService {
         FROM products ORDER BY id LIMIT 10 OFFSET ${page * 10}
       `;
       const data = await this.db.select(sql);
-
+      await this.db.release();
       return data;
     } catch (err) {
-      throw err;
-    } finally {
       await this.db.release();
+      throw err;
     }
   }
 }
