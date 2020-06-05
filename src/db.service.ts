@@ -13,12 +13,14 @@ export class DbService {
   };
 
   private conn: any;
-  private pool: any;
+  private pool: any = mysql.createPool(this.connection);
+
+  constructor() {
+    console.log('Mysql connected');
+  }
 
   public async connect(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.pool = mysql.createPool(this.connection);
-
       this.pool.getConnection((err, connection) => {
         if (err) {
           reject(err);
@@ -92,11 +94,14 @@ export class DbService {
     return new Promise((resolve) => {
       if (this.conn) {
         this.conn.release();
-        this.conn.destroy();
       }
       // console.log('release done');
       resolve(true);
     });
+  }
+
+  public async destroy(): Promise<any> {
+    this.conn.destroy();
   }
 
   public async disconnect(): Promise<any> {
