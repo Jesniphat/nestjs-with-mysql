@@ -92,7 +92,7 @@ export class DbService {
 
   public async release(): Promise<any> {
     return new Promise((resolve) => {
-      if (this.conn) {
+      if (this.conn && this.pool._freeConnections.indexOf(this.conn) === -1) {
         this.conn.release();
       }
       // console.log('release done');
